@@ -11,6 +11,8 @@ import MenuIcon from "./icons/MenuIcon";
 import { AddToAlbumModal } from "./add-to-album-modal";
 import { SearchResult } from "@/app/gallery/page";
 import { useState } from "react";
+import Link from "next/link";
+import { PencilIcon } from "lucide-react";
 
 export function ImageMenu({ image }: { image: SearchResult }) {
 	const [open, setOpen] = useState(false);
@@ -24,9 +26,16 @@ export function ImageMenu({ image }: { image: SearchResult }) {
 				</DropdownMenuTrigger>
 				<DropdownMenuContent className="w-[165px] rounded-xl">
 					<DropdownMenuItem asChild>
-						{/* <FolderPlus />
-							<span>Add to Album</span> */}
 						<AddToAlbumModal onClose={() => setOpen(false)} image={image} />
+					</DropdownMenuItem>
+
+					<DropdownMenuItem asChild>
+						<Link
+							className="cursor-pointer hover:bg-secondary/80 rounded-xl "
+							href={`/edit?publicId=${encodeURIComponent(image.public_id)}`}
+						>
+							<PencilIcon className="pl-1 ml-1 w-6 h-6 mr-3" /> Edit Image
+						</Link>
 					</DropdownMenuItem>
 				</DropdownMenuContent>
 			</DropdownMenu>
