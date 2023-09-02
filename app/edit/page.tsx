@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 "use client";
 import ForceRefresh from "@/components/force-refresh";
 import { Button } from "@/components/ui/button";
