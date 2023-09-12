@@ -98,7 +98,7 @@ export default function EditPage({
 						width="1000"
 						height="1000"
 					/>
-					{!isLoading && (
+					{isLoading && (
 						<div className="flex justify-center items-center flex-col">
 							<LoadingAnimation />
 							<div className="animate-blink">
