@@ -8,6 +8,7 @@ import { CldImage } from "next-cloudinary";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import LoadingAnimation from "@/components/LoadingAnimation";
 
 export default function EditPage({
 	searchParams: { publicId },
@@ -18,6 +19,11 @@ export default function EditPage({
 	const [prompt, setPrompt] = useState("");
 	const [pendingPrompt, setPendingPrompt] = useState("");
 	const [isInput, setIsInput] = useState(false);
+	// set state for custom height and width
+	const [customHeight, setCustomHeight] = useState("3146");
+	const [customWidth, setCustomWidth] = useState("2752");
+
+	const [isLoading, setIsLoading] = useState(false);
 
 	return (
 		<section>
@@ -46,8 +52,23 @@ export default function EditPage({
 									value={pendingPrompt}
 									onChange={(e) => setPendingPrompt(e.target.value)}
 								/>
+								<Input
+									id="height"
+									autoComplete="off"
+									placeholder="Custom Height"
+									value={customHeight}
+									onChange={(e) => setCustomHeight(e.target.value)}
+								/>
+								<Input
+									id="width"
+									autoComplete="off"
+									placeholder="custom Width"
+									value={customWidth}
+									onChange={(e) => setCustomWidth(e.target.value)}
+								/>
 								<Button
 									onClick={() => {
+										setIsLoading(true);
 										setTransformation("generative-fill");
 										setIsInput(false);
 										setPrompt(pendingPrompt);
@@ -69,24 +90,35 @@ export default function EditPage({
 						</Button>
 					))}
 				</div>
-				<div className="grid grid-cols-2 gap-12">
+				<div className="grid grid-cols-2 gap-12 relative">
 					<CldImage
 						src={publicId}
 						alt="Image"
 						className="rounded-2xl"
-						width="500"
-						height="500"
+						width="1000"
+						height="1000"
 					/>
+					{!isLoading && (
+						<div className="flex justify-center items-center flex-col">
+							<LoadingAnimation />
+							<div className="animate-blink">
+								<p className=" mt-4 text-2xl font-bold bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 w-fit text-transparent bg-clip-text ">
+									Loading...
+								</p>
+							</div>
+						</div>
+					)}
 
 					{transformation === "generative-fill" && (
 						<CldImage
 							src={publicId}
 							alt="Image"
 							className="rounded-2xl"
-							width="2400"
-							height="2400"
+							width={customWidth}
+							height={customHeight}
 							crop="pad"
 							fillBackground={{ prompt }}
+							onLoadingComplete={() => setIsLoading(false)}
 						/>
 					)}
 					{transformation === "blur" && (
@@ -94,9 +126,10 @@ export default function EditPage({
 							src={publicId}
 							alt="Image"
 							className="rounded-2xl"
-							width="500"
-							height="500"
+							width="2500"
+							height="2500"
 							blur="800"
+							onLoadingComplete={() => setIsLoading(false)}
 						/>
 					)}
 					{transformation === "grayscale" && (
@@ -104,9 +137,10 @@ export default function EditPage({
 							src={publicId}
 							alt="Image"
 							className="rounded-2xl"
-							width="500"
-							height="500"
+							width="2500"
+							height="2500"
 							grayscale
+							onLoadingComplete={() => setIsLoading(false)}
 						/>
 					)}
 					{transformation === "zoom" && (
@@ -114,9 +148,10 @@ export default function EditPage({
 							src={publicId}
 							alt="Image"
 							className="rounded-2xl"
-							width="500"
-							height="500"
+							width="2500"
+							height="2500"
 							zoompan
+							onLoadingComplete={() => setIsLoading(false)}
 						/>
 					)}
 
@@ -125,9 +160,10 @@ export default function EditPage({
 							src={publicId}
 							alt="Image"
 							className="rounded-2xl"
-							width="500"
-							height="500"
+							width="1500"
+							height="1500"
 							removeBackground
+							onLoadingComplete={() => setIsLoading(false)}
 						/>
 					)}
 				</div>
